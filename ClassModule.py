@@ -12,10 +12,10 @@ class Name(Field):
         
 class Phone(Field):
     def validate_number(self, number):
-        if len(number) != 10:
-            return self.phone == number
+        if len(number) == 10:
+            return number
         else:
-            return  
+            return False 
 
 class Record:
     def __init__(self, name) -> None:
@@ -23,25 +23,37 @@ class Record:
         self.phones = []
 
     def add_phone(self, phone_number):
-        self.phones.append(phone_number)
+        number = Phone(phone_number)
+        valid_number = number.validate_number(phone_number)
+        if valid_number:
+            self.phones.append(valid_number)
 
     def del_phone(self, phone_number):
         try: self.phones.remove(phone_number)
         except: pass
 
     def edit_phone(self, old_number, new_number):
-        pass
+        index = self.phones.index(old_number)
+        self.phones[index] = new_number 
 
     def find_phone(self, phone_number):
-        pass    
+        index = self.phones.index(phone_number)
+        return self.phones[index]
+    
+    def __str__(self) -> str:
+        return (f"Contact name:{self.value} phones:{self.phones}")    
 
 
 class AddressBook(UserDict):
-    def add_record(self, key, value):
-        self.data[key]= value
-    
-    def find_record(self, key):
-        pass
 
-    def del_record(self, key):
-        pass
+    def add_record(self, record_item):
+        self.data[record_item.value] = record_item.phones
+    
+    def find(self, key):
+        rec = Record(key)
+        for x in self[key]:
+            rec.add_phone(x)
+        return rec
+
+    def delete(self, key):
+        del self[key]
