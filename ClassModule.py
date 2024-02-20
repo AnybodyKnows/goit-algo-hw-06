@@ -1,4 +1,5 @@
 from collections import UserDict
+import re
 
 class Field:
     def __init__(self, value) -> None:
@@ -15,10 +16,17 @@ class Name(Field):
         
 class Phone(Field):
     def __init__(self, number):
-        if len(number) == 10:
+        if self.validate_number(number):
             super().__init__(number)
         else:
-            return False 
+            raise ValueError
+    
+    def validate_number(self, number):
+        if (len(number)==10) and \
+            (re.match(r"^\d+$",number)):
+            return True
+        else:
+            raise ValueError 
 
 class Record:
     def __init__(self, name) -> None:
@@ -28,7 +36,7 @@ class Record:
     def add_phone(self, phone_number):
         number = Phone(phone_number)
         if number:
-            self.phones.append(number.value)
+            self.phones.append(number)
 
     def remove_phone(self, phone_number):
         try: self.phones.remove(phone_number)
