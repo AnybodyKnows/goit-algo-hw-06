@@ -39,19 +39,25 @@ class Record:
             self.phones.append(number)
 
     def remove_phone(self, phone_number):
-        try: self.phones.remove(phone_number)
-        except: pass
+        phone_obj = Phone(phone_number)
+        for obj in self.phones:
+            if obj.value == phone_obj.value:
+                self.phones.remove(obj)
 
     def edit_phone(self, old_number, new_number):
-        index = self.phones.index(old_number)
-        self.phones[index] = new_number 
+        self.remove_phone(old_number)
+        self.add_phone(new_number)
 
     def find_phone(self, phone_number):
-        index = self.phones.index(phone_number)
-        return self.phones[index]
+        for n in self.phones:
+            if n.value == phone_number:
+                return phone_number
+            else:
+                pass
+
     
     def __str__(self) -> str:
-        return (f"Contact name:{self.name.value} phones:{self.phones}")    
+        return (f"Contact name:{self.name.value} phones:{[obj.value for obj in self.phones]}")    
 
 
 class AddressBook(UserDict):
