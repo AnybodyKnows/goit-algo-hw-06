@@ -17,7 +17,7 @@ book.add_record(jane_record)
 
 # Виведення всіх записів у книзі
 for name, record in book.data.items():
-    print(f"{name} {record}")
+    print(f" {record}")
 
 # Знаходження та редагування телефону для John
 john = book.find("John")
@@ -29,11 +29,11 @@ print (john)
 
 # Пошук конкретного телефону у записі John
 found_phone = john.find_phone("5555555555")
-print(f"{john.value}: {found_phone}")  
+print(f"{john.name.value}: {found_phone}")  
 
 # Видалення запису Jane
 book.delete("Jane")
 
 # Виведення всіх записів у книзі
 for name, record in book.data.items():
-    print(f"{name} {record}")
+    print(f"{record}")

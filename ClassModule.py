@@ -8,27 +8,29 @@ class Field:
         return self.value
     
 class Name(Field):
-    pass
+    def __init__(self, value):
+        if len(value) !=0:
+            super().__init__(value)
+        else: pass 
         
 class Phone(Field):
-    def validate_number(self, number):
+    def __init__(self, number):
         if len(number) == 10:
-            return number
+            super().__init__(number)
         else:
             return False 
 
 class Record:
     def __init__(self, name) -> None:
-        self.value = name
+        self.name = Name(name)
         self.phones = []
 
     def add_phone(self, phone_number):
         number = Phone(phone_number)
-        valid_number = number.validate_number(phone_number)
-        if valid_number:
-            self.phones.append(valid_number)
+        if number:
+            self.phones.append(number.value)
 
-    def del_phone(self, phone_number):
+    def remove_phone(self, phone_number):
         try: self.phones.remove(phone_number)
         except: pass
 
@@ -41,19 +43,16 @@ class Record:
         return self.phones[index]
     
     def __str__(self) -> str:
-        return (f"Contact name:{self.value} phones:{self.phones}")    
+        return (f"Contact name:{self.name.value} phones:{self.phones}")    
 
 
 class AddressBook(UserDict):
 
     def add_record(self, record_item):
-        self.data[record_item.value] = record_item.phones
+        self.data[record_item.name.value] = record_item
     
     def find(self, key):
-        rec = Record(key)
-        for x in self[key]:
-            rec.add_phone(x)
-        return rec
+        return self[key]
 
     def delete(self, key):
         del self[key]
