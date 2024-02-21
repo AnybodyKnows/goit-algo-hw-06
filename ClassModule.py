@@ -1,6 +1,7 @@
 from collections import UserDict
 import re
 
+
 class Field:
     def __init__(self, value) -> None:
         self.value = value
@@ -26,7 +27,13 @@ class Phone(Field):
             (re.match(r"^\d+$",number)):
             return True
         else:
-            raise ValueError 
+            raise ValueError
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Phone):
+            return self.value == other.value
+        else:
+            return False  
 
 class Record:
     def __init__(self, name) -> None:
@@ -45,28 +52,35 @@ class Record:
                 self.phones.remove(obj)
 
     def edit_phone(self, old_number, new_number):
+        self.find_phone(old_number)
         self.remove_phone(old_number)
         self.add_phone(new_number)
 
     def find_phone(self, phone_number):
-        for n in self.phones:
-            if n.value == phone_number:
-                return phone_number
-            else:
-                pass
+        ph = Phone(phone_number)
+        if ph in self.phones:
+            return ph
+        else:
+            raise ValueError
 
-    
+   
     def __str__(self) -> str:
         return (f"Contact name:{self.name.value} phones:{[obj.value for obj in self.phones]}")    
 
-
+    
 class AddressBook(UserDict):
 
     def add_record(self, record_item):
         self.data[record_item.name.value] = record_item
     
     def find(self, key):
-        return self[key]
+        if key in self:
+            return self[key]
+        else: 
+            raise KeyError
 
     def delete(self, key):
-        del self[key]
+        if key in self:
+            del self[key]
+        else: 
+            raise KeyError
